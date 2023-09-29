@@ -1,0 +1,55 @@
+#include <LiquidCrystal_I2C.h>
+
+LiquidCrystal_I2C lcd(32, 16, 2); // Endereço do display I2C e tamanho
+
+
+int TriggerSonna = 7;
+int EchoSonna = 6;
+
+int distance = 0;
+int time = 0;
+
+void setup() {
+  Serial.begin(9600);
+  
+  lcd.init(); // Inicializa o display
+  lcd.backlight(); // Liga o backlight do display
+  lcd.setCursor(0, 0);
+  lcd.print("Distancia:");
+  
+  pinMode(TriggerSonna, OUTPUT);
+  pinMode(EchoSonna, INPUT);
+  
+  
+}
+
+void loop() {
+  
+  digitalWrite(TriggerSonna,LOW); // faz a parte de establização do sensor
+ 
+  delayMicroseconds(2);
+  
+  digitalWrite(TriggerSonna, HIGH); // Envia uma pulsação para ativar
+  delayMicroseconds(10); 
+  digitalWrite(TriggerSonna,LOW);
+  
+  time = pulseIn(EchoSonna, HIGH);
+  distance = time/58.2; // Distancia = tempo * velocidade do som / 2 
+  
+  lcd.setCursor(0, 1);
+  lcd.print("           "); // Limpa a linha do display
+  lcd.setCursor(0, 1);
+  lcd.print(distance, 1); // Exibe a distância em cm com uma casa decimal
+  lcd.print("cm");
+  
+  if (distance < 100) {
+    Serial.println("Desviar do obstaculo");
+  } else {
+  	Serial.println("Pode seguir");
+  }
+  Serial.print("Distancia medida: ");
+  Serial.print(distance);
+  Serial.print("cm");
+  
+  delay(1000);	// Mede a cada 1 segundo
+}
