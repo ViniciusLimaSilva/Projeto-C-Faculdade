@@ -1,5 +1,5 @@
 
-# _Explicação Funcional do Terceiro exercício_
+# _Explicação Funcional do Quinto exercício_
 
 Os arquivos estão escritos em C
 
